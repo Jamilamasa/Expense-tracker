@@ -1,0 +1,25 @@
+Features: 
+Add expense (Description, date, amount)
+Delete expense
+Add income (Description, date, amount)
+Display individual expense & income in a table (expense should be in red)
+Display total income
+Display total expense
+Display net income
+
+
+Item module:
+An "item" constructor should be created in here
+Module should return an addItemToDataStructure function which should take in the parameters from app module, instantiate an "item object", and add the item to data structure
+Module should export "item" constructor
+Module should export data.
+
+
+App module: //There should be an init method
+locally call "itemModule.item" 
+Add a click event to the submit button in the modal
+Attach a function that would intantiate an "item" object, and then push the item to itemModule.data
+
+
+UI module: 
+This should export a function that loops through the data and display it in a table

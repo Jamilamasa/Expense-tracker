@@ -1,0 +1,25 @@
+.vh-89 {
+    height: 84.389vh;
+}
+.flex1 {
+    flex: 1;
+}
+.flex2 {
+    flex: 2;
+}
+.flex3 {
+    flex: 3;
+}
+.mobilePrompt{
+    display: none;
+}
+
+@media screen and (max-width: 1350px) {
+    body :not(.mobilePrompt) {
+        display: none;
+    }
+    .mobilePrompt {
+        display: block;
+        margin: auto;
+    }
+    }
