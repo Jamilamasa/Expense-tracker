@@ -24,13 +24,13 @@
             <div class="col flex1" id="controls">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" >Total Expense: <span id="totalExpense">#3000</span></h5>
-                        <h5>Total Income: <span id="totalIncome">#10000</span></h5>
+                        <h5>Total Expense: <span id="totalExpense">0</span></h5>
+                        <h5>Total Income: <span id="totalIncome">0</span></h5>
                     </div>
                 </div>
                 <div class="container mt-3">
-                    <button type="button" class="btn btn-success m-0" id="addExpense" data-bs-toggle="modal" data-bs-target="#addExpenseModal">Add Expense</button>
-                    <button type="button" class="btn btn-danger" id="addIncome" data-bs-toggle="modal" data-bs-target="#addIncomeModal">Add Income</button>
+                    <button type="button" class="btn btn-danger m-0" id="addExpense" data-bs-toggle="modal" data-bs-target="#addExpenseModal">Add Expense</button>
+                    <button type="button" class="btn btn-success" id="addIncome" data-bs-toggle="modal" data-bs-target="#addIncomeModal">Add Income</button>
                 </div>
             </div>
             <div class="col flex3 vh-89 overflow-auto" >
@@ -44,7 +44,7 @@
                       </tr>
                     </thead>
                     <tbody id="outputTable">
-                      <tr>
+                      <!-- <tr>
                         <th scope="row">1</th>
                         <td>10/02/03</td>
                         <td>Food</td>
@@ -61,16 +61,16 @@
                         <td>15/05/03</td>
                         <td>Larry the Bird</td>
                         <td>14400</td>
-                      </tr>
+                      </tr> -->
                     </tbody>
                   </table>
             </div>
-            <div class="col overflow-hidden" id="outputTable">
+            <div class="col overflow-hidden" id="outputNet">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Net Profit: <span id="netProfit">#7000</span></h5>
-                        <h5>%: <span id="percentProfit">70</span></h5>
-                        <p class="card-text">Remark: <span id="remark">You are in profit</span></p>
+                        <h5 class="card-title">Net Profit: <span id="netProfit"></span></h5>
+                        <h5>%: <span id="percentProfit"></span></h5>
+                        <p class="card-text">Remark: <span id="remark"></span></p>
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-floating mb-3">
-                    <input type="date" class="form-control" id="dateInput" placeholder="date">
+                    <input type="text" class="form-control" id="dateInput" placeholder="date">
                     <label for="dateInput">Date</label>
                     <div class="invalid-feedback">
                         Date must be in dd/mm/yyyy format
@@ -110,7 +110,7 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-primary addExpenseBtn">Add</button>
             </div>
         </div>
         </div>
@@ -125,7 +125,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-floating mb-3">
-                    <input type="date" class="form-control" id="dateInput" placeholder="date">
+                    <input type="text" class="form-control" id="dateInput" placeholder="date">
                     <label for="dateInput">Date</label>
                     <div class="invalid-feedback">
                         Date must be in dd/mm/yyyy format
@@ -148,7 +148,7 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-primary addIncomeBtn">Add</button>
             </div>
         </div>
         </div>

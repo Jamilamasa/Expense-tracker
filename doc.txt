@@ -23,3 +23,5 @@ Attach a function that would intantiate an "item" object, and then push the item
 
 UI module: 
 This should export a function that loops through the data and display it in a table
+
+Add to portfolio
