@@ -23,7 +23,8 @@ const UICtrl = (function(){
         totalIncome: document.getElementById('totalIncome'),
         totalExpense: document.getElementById('totalExpense'),
         netProfit: document.getElementById('netProfit'),
-        percentageProfit: document.getElementById('percentProfit')
+        percentageProfit: document.getElementById('percentProfit'),
+        remark: document.getElementById('remark')
     }
     // function populateTable(item){
     //     const table = UISelectors.tableBody;
@@ -74,6 +75,18 @@ const UICtrl = (function(){
         },
         displayPercentageProfit: function(percent){
             UISelectors.percentageProfit.textContent = percent
+        },
+        displayRemarks: function(net){
+            let remark = net>0?"You are in profit" : "Loss"
+            UISelectors.remark.textContent = remark
+        },
+        displayOutputNumers: function(){
+            UICtrl.clearInput()
+            const net = itemCtrl.getNetProfit()
+            UICtrl.displayNetProfit(net)
+            const percent = itemCtrl.getPercentageProfit()
+            UICtrl.displayPercentageProfit(percent)
+            UICtrl.displayRemarks(net)
         },
         UISelectors,
         addItemToTable
@@ -147,7 +160,7 @@ const itemCtrl = (function(){
         },
         getPercentageProfit: function(){
             let percent = 0
-            percent = (itemCtrl.getNetProfit()/data.totalIncome)*100
+            percent = ((itemCtrl.getNetProfit()/data.totalIncome)*100).toFixed(3)
             data.percentageProfit = percent
             return data.percentageProfit
         },
@@ -173,12 +186,8 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
             const totalExpense = itemCtrl.getTotalExpense()
             UICtrl.displayTotalExpense(totalExpense)
 
-            // Display net profit
-            UICtrl.clearInput()
-            const net = itemCtrl.getNetProfit()
-            UICtrl.displayNetProfit(net)
-            const percent = itemCtrl.getPercentageProfit()
-            UICtrl.displayPercentageProfit(percent)
+            
+            UICtrl.displayOutputNumers()
             
             e.preventDefault()
         }
@@ -197,13 +206,10 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
             // Display total income
             const totalIncome = itemCtrl.getTotalIncome()
             UICtrl.displayTotalIncome(totalIncome)
-            UICtrl.clearInput()
+            
     
-            // Display net profit
-            const net = itemCtrl.getNetProfit()
-            UICtrl.displayNetProfit(net)
-            const percent = itemCtrl.getPercentageProfit()
-            UICtrl.displayPercentageProfit(percent)
+            
+            UICtrl.displayOutputNumers()
         }
        
 
