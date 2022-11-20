@@ -22,7 +22,8 @@ const UICtrl = (function(){
         tableBody: document.getElementById("outputTable"),
         totalIncome: document.getElementById('totalIncome'),
         totalExpense: document.getElementById('totalExpense'),
-        netProfit: document.getElementById('netProfit')
+        netProfit: document.getElementById('netProfit'),
+        percentageProfit: document.getElementById('percentProfit')
     }
     // function populateTable(item){
     //     const table = UISelectors.tableBody;
@@ -71,6 +72,9 @@ const UICtrl = (function(){
             UISelectors.incomeDescriptionInput.value = '';
             UISelectors.incomeAmountInput.value = '';
         },
+        displayPercentageProfit: function(percent){
+            UISelectors.percentageProfit.textContent = percent
+        },
         UISelectors,
         addItemToTable
     }
@@ -94,7 +98,8 @@ const itemCtrl = (function(){
         ],
         totalIncome: 0,
         totalExpense: 0,
-        netProfit: 0
+        netProfit: 0,
+        percentageProfit: 0
     }
 
     return {
@@ -140,6 +145,12 @@ const itemCtrl = (function(){
             net = data.totalIncome - data.totalExpense
             return net
         },
+        getPercentageProfit: function(){
+            let percent = 0
+            percent = (itemCtrl.getNetProfit()/data.totalIncome)*100
+            data.percentageProfit = percent
+            return data.percentageProfit
+        },
         data
     }
 })()
@@ -155,18 +166,23 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
         const description = UICtrl.UISelectors.expenseDescriptionInput.value
         const amount = parseFloat(UICtrl.UISelectors.expenseAmountInput.value)
 
-        const newItem = itemCtrl.addItemToDataStructure(date, description, amount, "expense")
-        UICtrl.addItemToTable(newItem)
-        // Display total expense
-        const totalExpense = itemCtrl.getTotalExpense()
-        UICtrl.displayTotalExpense(totalExpense)
+        if(date !==  '' && description !== '' && amount !== '') {
+            const newItem = itemCtrl.addItemToDataStructure(date, description, amount, "expense")
+            UICtrl.addItemToTable(newItem)
+            // Display total expense
+            const totalExpense = itemCtrl.getTotalExpense()
+            UICtrl.displayTotalExpense(totalExpense)
 
-        // Display net profit
-        UICtrl.clearInput()
-        const net = itemCtrl.getNetProfit()
-        UICtrl.displayNetProfit(net)
+            // Display net profit
+            UICtrl.clearInput()
+            const net = itemCtrl.getNetProfit()
+            UICtrl.displayNetProfit(net)
+            const percent = itemCtrl.getPercentageProfit()
+            UICtrl.displayPercentageProfit(percent)
+            
+            e.preventDefault()
+        }
         
-        e.preventDefault()
     }
     // Add income
     function addIncome(e){
@@ -175,16 +191,21 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
         const amount = parseFloat(UICtrl.UISelectors.incomeAmountInput.value)
 
 
-        const newItem = itemCtrl.addItemToDataStructure(date, description, amount, "income")
-        UICtrl.addItemToTable(newItem)
-        // Display total income
-        const totalIncome = itemCtrl.getTotalIncome()
-        UICtrl.displayTotalIncome(totalIncome)
-        UICtrl.clearInput()
-
-        // Display net profit
-        const net = itemCtrl.getNetProfit()
-        UICtrl.displayNetProfit(net)
+        if(date !==  '' && description !== '' && amount !== '') {
+            const newItem = itemCtrl.addItemToDataStructure(date, description, amount, "income")
+            UICtrl.addItemToTable(newItem)
+            // Display total income
+            const totalIncome = itemCtrl.getTotalIncome()
+            UICtrl.displayTotalIncome(totalIncome)
+            UICtrl.clearInput()
+    
+            // Display net profit
+            const net = itemCtrl.getNetProfit()
+            UICtrl.displayNetProfit(net)
+            const percent = itemCtrl.getPercentageProfit()
+            UICtrl.displayPercentageProfit(percent)
+        }
+       
 
         e.preventDefault()
     }
