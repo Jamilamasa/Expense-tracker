@@ -1,5 +1,16 @@
 const storageCtrl = (function(){
-
+    return {
+        storeItem: function(item) {
+            let items;
+            if(localStorage.getItem('items') === null) {
+                items = []
+            } else {
+                items = JSON.parse(localStorage.getItem('items'))
+            }
+            items.push(item)
+            localStorage.setItem('items', JSON.stringify(items))
+        }
+    }
 })()
 const UICtrl = (function(){
     const UISelectors = {
@@ -188,6 +199,8 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
 
             
             UICtrl.displayOutputNumers()
+            // Add to LS
+            storageCtrl.storeItem(newItem)
             
             e.preventDefault()
         }
@@ -206,10 +219,10 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
             // Display total income
             const totalIncome = itemCtrl.getTotalIncome()
             UICtrl.displayTotalIncome(totalIncome)
-            
-    
-            
+                    
             UICtrl.displayOutputNumers()
+            // Add to LS
+            storageCtrl.storeItem(newItem)
         }
        
 

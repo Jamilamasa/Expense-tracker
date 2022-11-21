@@ -14,7 +14,7 @@
     display: none;
 }
 
-@media screen and (max-width: 1350px) {
+@media screen and (max-width: 780px) {
     body :not(.mobilePrompt) {
         display: none;
     }
