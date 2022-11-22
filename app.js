@@ -9,6 +9,14 @@ const storageCtrl = (function(){
             }
             items.push(item)
             localStorage.setItem('items', JSON.stringify(items))
+        },
+        getItem: function(){
+            if(localStorage.getItem('items') === null) {
+                items = []
+            } else {
+                items = JSON.parse(localStorage.getItem('items'))
+            }
+            return items;
         }
     }
 })()
@@ -99,6 +107,21 @@ const UICtrl = (function(){
             UICtrl.displayPercentageProfit(percent)
             UICtrl.displayRemarks(net)
         },
+        populateTable: function(items){
+            let html = ''
+            const table = UISelectors.tableBody
+            items.forEach((item)=>{
+                html += `
+            <tr class=${item.transaction === "expense"? "table-danger" : "table-success"}>
+                <th scope="row">${item.id + 1}</th>
+                <td>${item.date}</td>
+                <td>${item.description}</td>
+                <td>${item.amount}</td>
+            </tr>`
+            })
+            table.innerHTML = html
+
+        },
         UISelectors,
         addItemToTable
     }
@@ -114,12 +137,13 @@ const itemCtrl = (function(){
     }
     //Data structure 
     const data = {
-        items: [
+        items: 
             // Get this from local storage
             // {id: 1, date: "30/20/23", description: "chow", amount: 3000, transaction: "income"},
             // {id: 2, date: "30/20/23", description: "chow", amount: 2000, transaction: "expense"},
             // {id: 3, date: "30/20/23", description: "chow", amount: 2000, transaction: "income"}
-        ],
+            storageCtrl.getItem()
+        ,
         totalIncome: 0,
         totalExpense: 0,
         netProfit: 0,
@@ -183,6 +207,11 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
     function loadEventListeners(){
         UICtrl.UISelectors.addExpenseBtn.addEventListener('click', addExpense)
         UICtrl.UISelectors.addIncomeBtn.addEventListener('click', addIncome)
+        window.addEventListener('DOMContentLoaded', ()=>{
+            const item = storageCtrl.getItem()
+
+            UICtrl.populateTable(item)
+        })
     }
     // Add expense
     function addExpense(e){
