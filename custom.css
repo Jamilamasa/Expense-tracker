@@ -13,7 +13,10 @@
 .mobilePrompt{
     display: none;
 }
-
+.fa {
+    color: red;
+    font-size: 1rem;
+}
 @media screen and (max-width: 780px) {
     body :not(.mobilePrompt) {
         display: none;

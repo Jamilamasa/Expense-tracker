@@ -27,6 +27,7 @@ const UICtrl = (function(){
         // Buttons
         addExpenseBtn: document.querySelector('.addExpenseBtn'),
         addIncomeBtn: document.querySelector('.addIncomeBtn'),
+        deleteBtn: document.querySelector('.del'),
         // Fields
         expenseDateInput: document.querySelector('#addExpenseModal #dateInput'),
         expenseDescriptionInput: document.querySelector('#addExpenseModal #descriptionInput'),
@@ -70,7 +71,7 @@ const UICtrl = (function(){
         <th scope="row">${item.id + 1}</th>
         <td>${item.date}</td>
         <td>${item.description}</td>
-        <td>${item.amount}</td>
+        <td>${item.amount}<a href="#" class="float-end mt-2 del"><i class="fa fa-remove"></i></a></td>
     </tr>`
     table.innerHTML += html
     }
@@ -116,11 +117,51 @@ const UICtrl = (function(){
                 <th scope="row">${item.id + 1}</th>
                 <td>${item.date}</td>
                 <td>${item.description}</td>
-                <td>${item.amount}</td>
+                <td>${item.amount}<a href="#" class="float-end mt-2 del"><i class="fa fa-remove"></i></a></td>
             </tr>`
             })
             table.innerHTML = html
 
+        },
+        removeItem: function(e){
+            e.target.parentElement.parentElement.parentElement.remove()
+            // Remove from data structure
+            let id = parseInt(e.target.parentElement.parentElement.parentElement.firstElementChild.textContent)
+            let ds = itemCtrl.data.items
+            ds.forEach((item, index)=>{
+                if(item.id+1 === id){
+                    ds.splice(index, 1)
+                }
+                
+            })
+            
+            if(e.target.parentElement.parentElement.parentElement.classList.contains('table-success')){
+                // Subtract total income
+                UICtrl.UISelectors.totalIncome.textContent = UICtrl.UISelectors.totalIncome.textContent - parseInt(e.target.parentElement.parentElement.parentElement.lastElementChild.textContent)
+                // Net
+                UICtrl.UISelectors.netProfit.textContent = parseInt(UICtrl.UISelectors.netProfit.textContent) - parseInt(e.target.parentElement.parentElement.parentElement.lastElementChild.textContent)
+            } else {
+                 // Subtract total expense
+                UICtrl.UISelectors.totalExpense.textContent = UICtrl.UISelectors.totalExpense.textContent - parseInt(e.target.parentElement.parentElement.parentElement.lastElementChild.textContent)
+                // Net
+                UICtrl.UISelectors.netProfit.textContent = parseInt(UICtrl.UISelectors.netProfit.textContent) + parseInt(e.target.parentElement.parentElement.parentElement.lastElementChild.textContent)
+            }
+            // Recalculate % profit
+            // percent = ((itemCtrl.getNetProfit()/data.totalIncome)*100).toFixed(3)
+            percent = ((parseInt(UICtrl.UISelectors.netProfit.textContent))/(parseInt(UICtrl.UISelectors.totalIncome.textContent))*100).toFixed(3)
+
+            UICtrl.displayPercentageProfit(percent)
+            // remove from ls
+            UICtrl.removeItemFromLs(parseInt(e.target.parentElement.parentElement.parentElement.firstElementChild.textContent))
+        },
+        removeItemFromLs: function(id){
+            let ls = storageCtrl.getItem()
+            ls.forEach((item, index)=>{
+                if(item.id+1 === id){
+                    ls.splice(index, 1)
+                }
+            })
+            localStorage.setItem('items', JSON.stringify(ls))
         },
         UISelectors,
         addItemToTable
@@ -163,6 +204,9 @@ const itemCtrl = (function(){
 
             data.items.push(item)
             return item
+        },
+        removeItemFromDS: function(item){
+
         },
         getTotalIncome: function(){
             let total = 0;
@@ -211,29 +255,38 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
 
             UICtrl.populateTable(items)
             const totalIncome = itemCtrl.getTotalIncome()
-            UICtrl.displayTotalIncome(totalIncome)
+            UICtrl.displayTotalIncome(parseInt(totalIncome))
             const totalExpense = itemCtrl.getTotalExpense()
-            UICtrl.displayTotalExpense(totalExpense)
+            UICtrl.displayTotalExpense(parseInt(totalExpense))
             const net = itemCtrl.getNetProfit()
             UICtrl.displayNetProfit(net)
             const percent = itemCtrl.getPercentageProfit()
-            UICtrl.displayPercentageProfit(percent)
-            UICtrl.displayRemarks(net)
+            UICtrl.displayPercentageProfit((percent))
+            UICtrl.displayRemarks(parseInt(net))
         }
-            )
+        )
+        UICtrl.UISelectors.tableBody.addEventListener('click', (e)=>{
+            if(e.target.parentElement.classList.contains('del')){
+                if(confirm('Are you sure bro?')){
+                    UICtrl.removeItem(e)
+                }
+            }
+            // console.log(e.target.parentElement.parentElement.parentElement.classList)
+            e.preventDefault()
+        })
     }
     // Add expense
     function addExpense(e){
         const date = UICtrl.UISelectors.expenseDateInput.value
         const description = UICtrl.UISelectors.expenseDescriptionInput.value
-        const amount = parseFloat(UICtrl.UISelectors.expenseAmountInput.value)
+        const amount = parseInt(UICtrl.UISelectors.expenseAmountInput.value)
 
         if(date !==  '' && description !== '' && amount !== '') {
             const newItem = itemCtrl.addItemToDataStructure(date, description, amount, "expense")
             UICtrl.addItemToTable(newItem)
             // Display total expense
             const totalExpense = itemCtrl.getTotalExpense()
-            UICtrl.displayTotalExpense(totalExpense)
+            UICtrl.displayTotalExpense(parseInt(totalExpense))
 
             
             UICtrl.displayOutputNumers()
@@ -248,7 +301,7 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
     function addIncome(e){
         const date = UICtrl.UISelectors.incomeDateInput.value
         const description = UICtrl.UISelectors.incomeDescriptionInput.value
-        const amount = parseFloat(UICtrl.UISelectors.incomeAmountInput.value)
+        const amount = parseInt(UICtrl.UISelectors.incomeAmountInput.value)
 
 
         if(date !==  '' && description !== '' && amount !== '') {
@@ -256,7 +309,7 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
             UICtrl.addItemToTable(newItem)
             // Display total income
             const totalIncome = itemCtrl.getTotalIncome()
-            UICtrl.displayTotalIncome(totalIncome)
+            UICtrl.displayTotalIncome(parseInt(totalIncome))
                     
             UICtrl.displayOutputNumers()
             // Add to LS
