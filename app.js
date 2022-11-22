@@ -166,7 +166,6 @@ const itemCtrl = (function(){
         },
         getTotalIncome: function(){
             let total = 0;
-
             data.items.forEach((item)=>{
                 // check if item is an income
                 if(item.transaction === 'income'){
@@ -208,10 +207,20 @@ const app = (function(storageCtrl, UICtrl, itemCtrl){
         UICtrl.UISelectors.addExpenseBtn.addEventListener('click', addExpense)
         UICtrl.UISelectors.addIncomeBtn.addEventListener('click', addIncome)
         window.addEventListener('DOMContentLoaded', ()=>{
-            const item = storageCtrl.getItem()
+            const items = storageCtrl.getItem()
 
-            UICtrl.populateTable(item)
-        })
+            UICtrl.populateTable(items)
+            const totalIncome = itemCtrl.getTotalIncome()
+            UICtrl.displayTotalIncome(totalIncome)
+            const totalExpense = itemCtrl.getTotalExpense()
+            UICtrl.displayTotalExpense(totalExpense)
+            const net = itemCtrl.getNetProfit()
+            UICtrl.displayNetProfit(net)
+            const percent = itemCtrl.getPercentageProfit()
+            UICtrl.displayPercentageProfit(percent)
+            UICtrl.displayRemarks(net)
+        }
+            )
     }
     // Add expense
     function addExpense(e){
